@@ -58,10 +58,10 @@ Ys are
 	Ys make up an integer ref to the string in the languagepack to be printed
 
 
-## Clear client screan 
 
 
-Senario
+
+# Senario
 	port A				port B
 	C	S			C	S
 	| <-	| print scrien		| <-	| Update Client
