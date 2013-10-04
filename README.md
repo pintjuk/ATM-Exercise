@@ -64,6 +64,6 @@ Ys are
 # Senario
 	port A				port B
 	C	S			C	S
-	| <-	| print scrien		| <-	| Update Client
+	|<-	| print scrien		|<-	| Update Client
 	|	| clear screen and 	|	|	|
 	| 	| request integer input |	|
