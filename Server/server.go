@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"../Protocol"
 )
 
 func constructQuery() (query func(net.Conn), rconsol <-chan string) {

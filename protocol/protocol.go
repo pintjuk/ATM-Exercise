@@ -1,6 +1,6 @@
 package main
 
-import "fmt"
+/*import "fmt"
 
 func main() {
 	fmt.Println("hej")
@@ -12,5 +12,5 @@ func sendASCII(string message)
 
 func sendAddUpdate(string add, language lang)
 func ~
-
+*/
 finc
