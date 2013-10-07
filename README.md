@@ -20,8 +20,8 @@ Language Map is an list of an arbitrary amount of ellements
 
 
 Map ellement:
-| Reffnumber 	| 0xFF	0x7F	| Text 				| 0xFF 0x01 |
-| aligned to 8 	| 16 bits		| aligend to 8 bits | 16 bits 	|
+| Reffnumber	| Text 				| 0xFF 0x00 |
+| 2 byte	 	| aligend to 8 bits | 16 bits 	|
 
 
 # Print
@@ -40,7 +40,7 @@ UTF-8 encoded html
 
 ## Server
 * Update Add
-* Print to the client Screen
+* Print to the client Screen, inserting real time data from server
 * Clear Client screen 
 * Request integer input data
 
