@@ -1,6 +1,6 @@
 package protocol
 
 const (
-	MAIN_PORT = 9000
-	BLOB_PORT = 9001
+	MAIN_PORT   = 9000
+	UPDATE_PORT = 9001
 )

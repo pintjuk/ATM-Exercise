@@ -1,4 +1,4 @@
-package main
+package protocol
 
 /*import "fmt"
 
@@ -13,4 +13,3 @@ func sendASCII(string message)
 func sendAddUpdate(string add, language lang)
 func ~
 */
-finc
