@@ -35,22 +35,17 @@ Xses are ether 2 32 bit integers ore one 64 bit ingteger
 	0x02 Y Y Y Y Y Y Y Y Y
 Ys are 
 	
-## Request integer data
-
-	0x01 X X X X X X X X X 
-
-## Request ASCII data
-	
-	0x02 X X X X X X X X X
 
 ## Print to client screen
 
 	
-	0x03 A B X X X Y Y Y Y
+	W X X X X X X X X X
 	
-	A = 0xff clear old content from client screan before printing
-	B = 0xff request integer data after printing is done
-	B = 0xfe request ASCII data after printing is done
+	how W is interpreted:
+	1 x x x x x x x = print command
+	x 1 x x x x x x = flag to tell the client to clear the scrin before printing
+	x x 1 x x x x x = flgg to request data (integer if not ascii)
+	x x 1 1 x x x x = flgg to request ASCII data 
 	
 	Ys make up an integer ref to the string in the languagepack to be printed
 
