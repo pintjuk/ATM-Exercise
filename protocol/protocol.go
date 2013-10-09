@@ -9,6 +9,7 @@ import (
 
 const (
 	ETB        byte = 0x17
+	ET         byte = 0x18
 	SEND_UINT  byte = 0x01
 	SEND_LOGON byte = 0x02
 )
