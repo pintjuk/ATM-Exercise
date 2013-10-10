@@ -76,15 +76,41 @@ func MakePrintCMD(stringRef uint8, livedata []byte, flags ...byte) []byte {
 	buf.Write(livedata)
 	return buf.Bytes()
 }
+func mergFlags(flags []byte) (opcode byte) {
+	opcode = PRINT_OPCODE
+	for _, e := range flags {
+		opcode = opcode | e
+	}
+	return
+}
+
+func MakePrintUintCMD(stringRef uint8, livedata uint64, flags ...byte) []byte {
+	buf := bytes.NewBuffer(make([]byte, 0, 8))
+	binary.Write(buf, binary.BigEndian, livedata)
+
+	return MakePrintCMD(stringRef, buf.Bytes(), mergFlags(flags))
+}
 func MakePrintIntCMD(stringRef uint8, livedata int64, flags ...byte) []byte {
 	buf := bytes.NewBuffer(make([]byte, 0, 8))
 	binary.Write(buf, binary.BigEndian, livedata)
 
-	var opcode byte = PRINT_OPCODE
-	for _, e := range flags {
-		opcode = opcode | e
-	}
-	return MakePrintCMD(stringRef, buf.Bytes(), opcode)
+	return MakePrintCMD(stringRef, buf.Bytes(), mergFlags(flags))
+}
+
+func MakePrintFloatCMD(stringRef uint8, livedata float64, flags ...byte) []byte {
+	buf := bytes.NewBuffer(make([]byte, 0, 8))
+	binary.Write(buf, binary.BigEndian, livedata)
+
+	return MakePrintCMD(stringRef, buf.Bytes(), mergFlags(flags))
+}
+
+func MakePrintStringCMD(stringRef uint8, livedata string, flags ...byte) []byte {
+	buf := bytes.NewBuffer(make([]byte, 0, 8))
+	buf.WriteString(livedata)
+	buf.WriteByte(0x00)
+	buf.Truncate(8)
+
+	return MakePrintCMD(stringRef, buf.Bytes(), mergFlags(flags))
 }
 
 func DecodePrintCMD(data []byte, lang Lang) (usertext string, clear bool, dataRequest byte, err error) {
@@ -97,7 +123,6 @@ func DecodePrintCMD(data []byte, lang Lang) (usertext string, clear bool, dataRe
 	var dataAsUint uint64
 	var dataAsInt int64
 	var dataAsFlout float64
-	var dataAsString string
 
 	buf := bytes.NewBuffer(make([]byte, 0, 10))
 	read := func(d interface{}) {
@@ -108,7 +133,11 @@ func DecodePrintCMD(data []byte, lang Lang) (usertext string, clear bool, dataRe
 	read(&dataAsUint)
 	read(&dataAsInt)
 	read(&dataAsFlout)
-	read(&dataAsString)
+
+	buf.Reset()
+	buf.Write(data[2:10])
+	buf.WriteByte(0x00)
+	dataAsString, _ := buf.ReadString(0x00)
 
 	usertext = strings.Replace(lang[data[1]], "%u", fmt.Sprintf("%d", dataAsUint), -1)
 	usertext = strings.Replace(usertext, "%i", fmt.Sprintf("%d", dataAsInt), -1)
