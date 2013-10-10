@@ -28,24 +28,31 @@ ellement:
 # 10 byte Comands 
 ## Send integer data
 
-	0x01 X Y Y Y Y Y Y Y Y 
-	
-Xses are ether 2 32 bit integers ore one 64 bit ingteger
+	 W X X X X X X X X X
+	w = 0x01 
+	folowing 8 bytes are one 64 bit encoded unsigned integer
+	w = 0x02
+	folowing 8 bytes are one double
+	W = 0x4 
+	folowing 4 bytes are one signed integer
+	w = 0x5
+	folowing 9 bytes are 9 ASCII characters
+	w = 0x6 
 
-	0x02 Y Y Y Y Y Y Y Y Y
-Ys are 
-	
 
 ## Print to client screen
 
 	
-	W X X X X X X X X X
+	W Y X X X X X X X X
 	
 	how W is interpreted:
 	1 x x x x x x x = print command
-	x 1 x x x x x x = flag to tell the client to clear the scrin before printing
-	x x 1 x x x x x = flgg to request data (integer if not ascii)
-	x x 1 1 x x x x = flgg to request ASCII data 
+	x x x x 1 x x x = flag to tell the client to clear the scrin before printing
+	x 1 0 0 x x x x = flgg to request data (integer if not ascii)
+	x 1 1 0 x x x x = flgg to request ASCII data 
+	x 1 1 1 x x x x = flag to request login data
+
+	Y is the ref to the string to be printed
 	
 	Ys make up an integer ref to the string in the languagepack to be printed
 
