@@ -4,14 +4,22 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"strings"
 )
 
 const (
 	ETB        byte = 0x17
 	ET         byte = 0x18
-	SEND_UINT  byte = 0x01
-	SEND_LOGON byte = 0x02
+	SEND_UINT  byte = 0x02
+	SEND_INT   byte = 0x06
+	SEND_FLOAT byte = 0x0E
+	SEND_LOGIN byte = 0x1E
+	SEND_ASCII byte = 0x3E
+	SEND_OTHER byte = 0x7E
+
+	PRINT_OPCODE byte = 0x01
+	CLEAR_FlAG   byte = 0x80
 )
 
 func MakeUpdate(add string, lang Lang) (result []byte) {
@@ -43,17 +51,68 @@ func IsUintSendMSG(msg []byte) bool {
 }
 
 func DecodeUintMSG(msg []byte) (result uint64, err error) {
-	if IsUintSendMSG(msg) {
+	if !IsUintSendMSG(msg) {
 		return 0, errors.New("Not send Uint message")
 	}
-	result, n := binary.Uvarint(msg[1:9])
-	if n < 0 {
-		err = errors.New("Unable to read data")
-	}
+	buf := bytes.NewBuffer(make([]byte, 0, 10))
+	buf.Write(msg[1:])
+	fmt.Println()
+	binary.Read(buf, binary.BigEndian, &result)
 	return
 }
+
 func MakeSendLoginCMD()
 
 func DecodeSendDataCMD()
 
-func MakePrintCMD()
+func MakePrintCMD(stringRef uint8, livedata []byte, flags ...byte) []byte {
+	buf := bytes.NewBuffer(make([]byte, 0, 10))
+	var opcode byte = 0x01
+	for _, e := range flags {
+		opcode = opcode | e
+	}
+	buf.WriteByte(opcode)
+	buf.WriteByte(byte(stringRef))
+	buf.Write(livedata)
+	return buf.Bytes()
+}
+func MakePrintIntCMD(stringRef uint8, livedata int64, flags ...byte) []byte {
+	buf := bytes.NewBuffer(make([]byte, 0, 8))
+	binary.Write(buf, binary.BigEndian, livedata)
+
+	var opcode byte = PRINT_OPCODE
+	for _, e := range flags {
+		opcode = opcode | e
+	}
+	return MakePrintCMD(stringRef, buf.Bytes(), opcode)
+}
+
+func DecodePrintCMD(data []byte, lang Lang) (usertext string, clear bool, dataRequest byte, err error) {
+	if data[0]&PRINT_OPCODE != PRINT_OPCODE {
+		err = errors.New("this is not a print command")
+	}
+	dataRequest = data[0] & SEND_OTHER
+	clear = data[0]&CLEAR_FlAG == CLEAR_FlAG
+
+	var dataAsUint uint64
+	var dataAsInt int64
+	var dataAsFlout float64
+	var dataAsString string
+
+	buf := bytes.NewBuffer(make([]byte, 0, 10))
+	read := func(d interface{}) {
+		buf.Reset()
+		buf.Write(data[2:10])
+		binary.Read(buf, binary.BigEndian, d)
+	}
+	read(&dataAsUint)
+	read(&dataAsInt)
+	read(&dataAsFlout)
+	read(&dataAsString)
+
+	usertext = strings.Replace(lang[data[1]], "%u", fmt.Sprintf("%d", dataAsUint), -1)
+	usertext = strings.Replace(usertext, "%i", fmt.Sprintf("%d", dataAsInt), -1)
+	usertext = strings.Replace(usertext, "%f", fmt.Sprintf("%f", dataAsFlout), -1)
+	usertext = strings.Replace(usertext, "%s", fmt.Sprintf("%s", dataAsString), -1)
+	return
+}
