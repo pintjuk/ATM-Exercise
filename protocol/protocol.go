@@ -9,15 +9,14 @@ import (
 )
 
 const (
-	ETB        byte = 0x17
-	ET         byte = 0x18
-	SEND_UINT  byte = 0x02
-	SEND_INT   byte = 0x06
-	SEND_FLOAT byte = 0x0E
-	SEND_LOGIN byte = 0x1E
-	SEND_ASCII byte = 0x3E
-	SEND_OTHER byte = 0x7E
-
+	ETB          byte = 0x17
+	ET           byte = 0x18
+	SEND_UINT    byte = 0x02
+	SEND_INT     byte = 0x06
+	SEND_FLOAT   byte = 0x0E
+	SEND_LOGIN   byte = 0x1E
+	SEND_ASCII   byte = 0x3E
+	SEND_OTHER   byte = 0x7E
 	PRINT_OPCODE byte = 0x01
 	CLEAR_FlAG   byte = 0x80
 )
@@ -56,14 +55,9 @@ func DecodeUintMSG(msg []byte) (result uint64, err error) {
 	}
 	buf := bytes.NewBuffer(make([]byte, 0, 10))
 	buf.Write(msg[1:])
-	fmt.Println()
 	binary.Read(buf, binary.BigEndian, &result)
 	return
 }
-
-func MakeSendLoginCMD()
-
-func DecodeSendDataCMD()
 
 func MakePrintCMD(stringRef uint8, livedata []byte, flags ...byte) []byte {
 	buf := bytes.NewBuffer(make([]byte, 0, 10))
@@ -108,7 +102,7 @@ func MakePrintStringCMD(stringRef uint8, livedata string, flags ...byte) []byte 
 	buf := bytes.NewBuffer(make([]byte, 0, 8))
 	buf.WriteString(livedata)
 	buf.WriteByte(0x00)
-	buf.Truncate(8)
+	//buf.Truncate(8)
 
 	return MakePrintCMD(stringRef, buf.Bytes(), mergFlags(flags))
 }
