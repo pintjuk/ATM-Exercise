@@ -45,11 +45,30 @@ func MakeSendUintMSG(data uint64) (msg []byte) {
 	msg = buf.Bytes()
 	return
 }
+
+func MakeSendFloatMSG(data float64) (msg []byte) {
+	buf := bytes.NewBuffer(make([]byte, 0, 10))
+	buf.WriteByte(SEND_UINT)
+	binary.Write(buf, binary.BigEndian, data)
+	msg = buf.Bytes()
+	return
+}
+
 func IsUintSendMSG(msg []byte) bool {
 	return msg[0] == SEND_UINT
 }
 
 func DecodeUintMSG(msg []byte) (result uint64, err error) {
+	if !IsUintSendMSG(msg) {
+		return 0, errors.New("Not send Uint message")
+	}
+	buf := bytes.NewBuffer(make([]byte, 0, 10))
+	buf.Write(msg[1:])
+	binary.Read(buf, binary.BigEndian, &result)
+	return
+}
+
+func DecodeFloatMSG(msg []byte) (result float64, err error) {
 	if !IsUintSendMSG(msg) {
 		return 0, errors.New("Not send Uint message")
 	}

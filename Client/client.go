@@ -111,6 +111,13 @@ func main() {
 			fmt.Scanln(&e)
 			talkConn.Write(protocol.MakeSendUintMSG(e))
 			break
+		case protocol.SEND_FLOAT:
+			fmt.Println("\n\n\n")
+			var e float64
+			fmt.Print("> ")
+			fmt.Scanln(&e)
+			talkConn.Write(protocol.MakeSendFloatMSG(e))
+			break
 		case protocol.SEND_INT:
 		}
 	}

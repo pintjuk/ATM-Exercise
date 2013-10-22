@@ -185,8 +185,35 @@ func construct() (talk func(net.Conn), update func(net.Conn), rprinting <-chan s
 						if account.login(uint8(code)) {
 							conn.Write(protocol.MakePrintStringCMD(SUCLOGIN, account.name, protocol.CLEAR_FlAG))
 							time.Sleep(time.Millisecond * 10)
-							conn.Write(protocol.MakePrintFloatCMD(BALANCE, account.balance))
-							time.Sleep(time.Second * 20)
+							conn.Write(protocol.MakePrintFloatCMD(BALANCE, account.balance, protocol.SEND_UINT))
+							n, err = conn.Read(buff)
+							if err != nil {
+								return
+							}
+							chose, _ := protocol.DecodeUintMSG(buff[:n])
+							if chose == 1 {
+								conn.Write(protocol.MakePrintFloatCMD(AMOUNT, account.balance, protocol.CLEAR_FlAG, protocol.SEND_FLOAT))
+								n, err = conn.Read(buff)
+								if err != nil {
+									return
+								}
+								amount, _ := protocol.DecodeFloatMSG(buff[:n])
+								conn.Write(protocol.MakePrintFloatCMD(WITHDRAWL, account.balance, protocol.CLEAR_FlAG))
+								account.balance -= amount
+								time.Sleep(time.Second * 2)
+
+							} else if chose == 2 {
+								conn.Write(protocol.MakePrintFloatCMD(AMOUNT, account.balance, protocol.CLEAR_FlAG, protocol.SEND_FLOAT))
+								n, err = conn.Read(buff)
+								if err != nil {
+									return
+								}
+								amount, _ := protocol.DecodeFloatMSG(buff[:n])
+								conn.Write(protocol.MakePrintFloatCMD(DIPOSIT, account.balance, protocol.CLEAR_FlAG))
+								account.balance += amount
+								time.Sleep(time.Second * 2)
+							}
+
 							break
 						} else {
 							conn.Write(protocol.MakePrintUintCMD(ERR_CODE, uint64(failcount), protocol.CLEAR_FlAG))
