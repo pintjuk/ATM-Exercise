@@ -126,7 +126,7 @@ this is how the clien shoud work
 ------------------------------	   -----------------------------------	   |				|
 |initilize conection to servr|---->|wait for print message from server|____| if server 			|
 ------------------------------   ->|and print acordingly              |      dosent request 		|
-				|   -----------------------------------	     dosent request data 	|
+				|   -----------------------------------	     dat		 	|
 				|	| server requests  |server requests 				|
 				|	| integer data     |Ascii data					|
 			        |	|		   |						|
