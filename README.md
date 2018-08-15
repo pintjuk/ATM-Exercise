@@ -62,7 +62,7 @@ element contains an refference number witch is an 8 bit unsigned integer folowed
 # Senario
 	port 9000				port 9001
 	C	S				C	S
-	|<-	| S sentding client id		|	| 
+	|<-	| S sending client id		|	| 
 	|<-	| S sending UpdateAdd		|->	| confirming client id
 	|	|				|	|
 	| 	|				|<-	| server sends 
@@ -80,7 +80,7 @@ element contains an refference number witch is an 8 bit unsigned integer folowed
 	|	|				|	| print to client screen comand
 	|	|				|	| with argument to print homescreen
 	|	|				|	|
-	|	|				|	| user chuses to login 
+	|	|				|	| user chooses to login 
 	|	|				|->	| client sends a "send integer data" package to server
 	|	|				|	| 
 	|	|				|	| server runs some logic
@@ -102,7 +102,7 @@ element contains an refference number witch is an 8 bit unsigned integer folowed
 	|	|				|<-	| server sends "Print to client screen "
 	|	|				|	| with client name as argument and arguments to print Nameblock
 	|	|				|	| 
-	|	|				|->	| user chuses to withdraw and the client sends "integer data" package with the amount withdrown
+	|	|				|->	| user chooses to withdraw and the client sends "integer data" package with the amount withdrown
 	|	|				|	| 
 	|	|				|	| server runs some logic, withdraws the amount and logs out the user
 	|	|				|<-	| server sends "print to user screen packag" with arguments to print initial screen
