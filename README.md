@@ -114,7 +114,7 @@ All the logic is ment to run on the server and every implementatin of the client
 is suposed to be a simple state machine so that the client dosent ever need to be updated.
 
 this is how the clien shoud work 
-
+`
 
 -------
 |start|
@@ -136,3 +136,4 @@ this is how the clien shoud work
 		          |ask user for integer data  |    | ask user for ascii data  |_______________/
 		          |send integer data to server|    | send ascii data to server|
 		          -----------------------------    ----------------------------
+`
