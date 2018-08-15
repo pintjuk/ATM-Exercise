@@ -1,9 +1,21 @@
+This is a golang implementation of a simple ATM banking client and server. 
+
+ATMs is an interesting probelm for Client server protocol design. Typecally the client software is dificult to update, and the bandwidth is limited. However the aplication may still have to be updated with new banking features and languages.
+
+Therefore we designed a protocol for a very thin client, that delegates all logic to the server. The protocol allowes the server to be updated without needing to update the client, as long as the protocol is followed. The protocol is also designed to use as little bandwidth as possble.
+
+A special feature of the protocol is that it allowes the display of the language of the client.
+
+Therefore we desined the protocol.
+
+
+
 # Ports and initiation 
 port 9000 is the talk-port, port 9001 is the update-port.
 
 The first thing sent ovver the update port must be 32 bit integer from server to the cliant.
 
-The first thing sent ovver the the talk port must start by a 32 bit enteger cliant sends to server, it must be the same value the client resived from the server ovver the update port. This integer vill be revered to as the client ID.
+The first thing sent ovver the the talk port must start by a 32 bit integer cliant sends to server, it must be the same value the client resived from the server ovver the update port. This integer vill be reserved as the client ID.
 
 # Update Add
 update add updates the Advertisment and the language package
@@ -24,7 +36,7 @@ Languagepack is an list of an arbitrary amount of ellements
 ellement:
 	| Reffnumber 	| Text			| 0x17	 	|
 	| 8 bits 	| aligend to 8 bits 	| 8 bits 	|
-element contains an refference number witch is an 8 bit unsigned integer folowed by an UTF-8 string terminated by a EOT(0x17) byte
+element contains a refference number witch is an 8 bit unsigned integer folowed by an UTF-8 string terminated by a EOT(0x17) byte
 
 
 
