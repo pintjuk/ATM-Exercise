@@ -34,8 +34,10 @@ Message starts with a sequens of UTF-8 characters terminated by ETB(0x17) and is
 Languagepack is an list of an arbitrary amount of ellements
 
 ellement:
+
 	| Reffnumber 	| Text			| 0x17	 	|
 	| 8 bits 	| aligend to 8 bits 	| 8 bits 	|
+	
 element contains a refference number witch is an 8 bit unsigned integer folowed by an UTF-8 string terminated by a EOT(0x17) byte
 
 
